@@ -12,10 +12,10 @@ Solutions are represented in the format [[r, c], [r, c], [r, c], [r, c]]
 where `r` and `c` represent the row and column, respectively, where a
 queen must be placed on the chessboard.
 """
-import random
+import sys
 
-def random_chromosome(size): #making random chromosomes 
-    return [ random.randint(1, nq) for _ in range(nq) ]
+def sys_chromosome(size): #making random chromosomes 
+    return [ sys.randint(1, nq) for _ in range(nq) ]
 
 def fitness(chromosome):
     horizontal_collisions = sum([chromosome.count(queen)-1 for queen in chromosome])/2
@@ -42,10 +42,10 @@ def fitness(chromosome):
 def probability(chromosome, fitness):
     return fitness(chromosome) / maxFitness
 
-def random_pick(population, probabilities):
+def sys_pick(population, probabilities):
     populationWithProbabilty = zip(population, probabilities)
     total = sum(w for c, w in populationWithProbabilty)
-    r = random.uniform(0, total)
+    r = sys.uniform(0, total)
     upto = 0
     for c, w in zip(population, probabilities):
         if upto + w >= r:
@@ -55,13 +55,13 @@ def random_pick(population, probabilities):
         
 def reproduce(x, y): #doing cross_over between two chromosomes
     n = len(x)
-    c = random.randint(0, n - 1)
+    c = sys.randint(0, n - 1)
     return x[0:c] + y[c:n]
 
 def mutate(x):  #randomly changing the value of a random index of a chromosome
     n = len(x)
-    c = random.randint(0, n - 1)
-    m = random.randint(1, n)
+    c = sys.randint(0, n - 1)
+    m = sys.randint(1, n)
     x[c] = m
     return x
 
@@ -70,8 +70,8 @@ def genetic_queen(population, fitness):
     new_population = []
     probabilities = [probability(n, fitness) for n in population]
     for i in range(len(population)):
-        x = random_pick(population, probabilities) #best chromosome 1
-        y = random_pick(population, probabilities) #best chromosome 2
+        x = sys_pick(population, probabilities) #best chromosome 1
+        y = sys_pick(population, probabilities) #best chromosome 2
         child = reproduce(x, y) #creating two new chromosomes from the best 2 chromosomes
         if random.random() < mutation_probability:
             child = mutate(child)
@@ -87,7 +87,7 @@ def print_chromosome(chrom):
 if __name__ == "__main__":
     nq = int(input("Enter Number of Queens: ")) #say N = 8
     maxFitness = (nq*(nq-1))/2  # 8*7/2 = 28
-    population = [random_chromosome(nq) for _ in range(100)]
+    population = [sys_chromosome(nq) for _ in range(100)]
     
     generation = 1
 
